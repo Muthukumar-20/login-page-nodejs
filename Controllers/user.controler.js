@@ -31,7 +31,7 @@ export const loginUser = async (req, res) => {
       return res.status(400).json({ message: "invalid password" });
     }
     const token = jwt.sign({ _id: user._id }, process.env.JWT_KEY, {
-      expiresIn: "1h",
+      expiresIn: "5h",
     });
     user.token = token;
     await user.save();
@@ -43,8 +43,10 @@ export const loginUser = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const userId = req.user._id;
-    const user = await User.findOne(userId);
-    res.status(200).json({ message: "Authorized User", data: [user] });
-  } catch (error) {}
+    //const userId = req.user._id;
+    const user = await User.find();
+    res.status(200).json({ message: "Authorized User", data: user });
+  } catch (error) {
+        res.status(500).json({ message: error.message });
+  }
 };
